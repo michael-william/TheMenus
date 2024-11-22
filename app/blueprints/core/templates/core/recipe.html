@@ -1,0 +1,247 @@
+<!-- Show detail of an individual wine Recipes -->
+{% extends "base.html" %}
+{% block title %}Recipe{% endblock %}
+{{ ckeditor.load() }}
+
+{% block content %}
+<!-- Full-Screen Loading Spinner Modal (initially hidden) -->
+<div class="container my-5">
+    <div class="profile-card">
+        <!-- Profile Header with Editable Toggle Button -->
+        <div class="profile-header d-flex justify-content-between align-items-center">
+            <!-- Title Field -->
+            <div id="title-field" class="d-flex justify-content-between align-items-center">
+                <h2 class="editable-field">
+                    {{ recipe.Title }}
+                </h2>
+                <button class="btn btn-sm hidden toggleable-button"
+                        hx-get="{{ url_for('core.edit_field', recipe_id=recipe.Id, field='Title') }}"
+                        hx-target="#title-field"
+                        hx-swap="outerHTML">
+                    <i class="bi bi-pencil"></i> <!-- Bootstrap pencil icon -->
+                </button>
+            </div>
+        <!-- Edit Button -->
+            <button class="btn btn-outline-primary btn-edit" id="toggle-edit" onclick="toggleButtons()">Edit</button>
+        </div>
+        
+        <!-- Profile Body with Editable Details -->
+        <div class="profile-body row">
+            <!-- Recipe Details -->
+            <div class="col-12 col-md-7">
+                <div class="d-flex flex-column gap-3">
+                    <!-- Editable Meal Field -->
+                    <div class="icon-text d-flex align-items-start">
+                        {% if recipe.Meal == "Brunch" %}
+                            <i class="bi bi-sunrise-fill fs-3 me-2"></i>
+                        {% elif recipe.Meal == "Lunch" %}
+                            <i class="bi bi-sun-fill fs-3 me-2"></i>
+                        {% elif recipe.Meal == "Dinner" %}
+                            <i class="bi bi-sunset-fill fs-3 me-2"></i>
+                        {% elif recipe.Meal == "BBQ" %}
+                            <i class="bi bi-emoji-sunglasses-fill fs-3 me-2"></i>
+                        {% endif %}
+                        <span id="meal-field" class="fs-4 text-wrap">
+                            <strong>Meal:</strong> {{ recipe.Meal or "N/A" }}
+                        </span>
+                        <button class="btn btn-sm hidden toggleable-button"
+                                hx-get="{{ url_for('core.edit_field', recipe_id=recipe.Id, field='Meal') }}"
+                                hx-target="#meal-field"
+                                hx-swap="outerHTML">
+                            <i class="bi bi-pencil"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- Editable Core Field -->
+                    <div class="icon-text d-flex align-items-start">
+                        <i class="bi bi-egg-fill fs-3 me-2"></i>
+                        <span id="core-field" class="fs-4 text-wrap">
+                            <strong>Core:</strong> {{ recipe.Core or "N/A" }}
+                        </span>
+                        <button class="btn btn-sm hidden toggleable-button"
+                                hx-get="{{ url_for('core.edit_field', recipe_id=recipe.Id, field='Core') }}"
+                                hx-target="#core-field"
+                                hx-swap="outerHTML">
+                            <i class="bi bi-pencil"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- Editable Source Field -->
+                    <div class="icon-text d-flex align-items-start">
+                        <i class="bi bi-person-lines-fill fs-3 me-2"></i>
+                        <div class="d-flex flex-grow-1 align-items-center">
+                            <span class="fs-4 text-wrap" style="word-break: break-word;">
+                                <strong>Source:</strong>
+                                <span id="source-field">
+                                    {% if recipe.Source %}
+                                        {% for word in recipe.Source.split() %}
+                                            {% if word.startswith("http") %}
+                                                <a href="{{ word }}" target="_blank" rel="noopener noreferrer" class="text-decoration-none">
+                                                    Link
+                                                </a>
+                                            {% else %}
+                                                {{ word }}
+                                            {% endif %}
+                                            {% if not loop.last %} {{ " " }} {% endif %}
+                                        {% endfor %}
+                                    {% else %}
+                                        No source available
+                                    {% endif %}
+                                </span>
+                            </span>
+                            
+                            <!-- Edit Button with Icon -->
+                            <button class="btn btn-sm ms-2 hidden toggleable-button"
+                                    hx-get="{{ url_for('core.edit_field', field='Source', recipe_id=recipe.Id) }}"
+                                    hx-target="#source-field"
+                                    hx-swap="outerHTML">
+                                <i class="bi bi-pencil"></i> <!-- Bootstrap pencil icon -->
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Notes -->
+                    <div class="icon-text d-flex align-items-start">
+                        <i class="bi bi-bookmark-check-fill fs-3 me-2"></i>
+                        <div class="d-flex flex-grow-1 align-items-center">
+                                <span id="notes-field" class="fs-4 text-wrap">
+                                    <strong>Notes</strong><br> {{ recipe.Notes or "N/A" }}
+                                </span>
+                                <button class="btn btn-sm hidden toggleable-button"
+                                        hx-get="{{ url_for('core.edit_field', recipe_id=recipe.Id, field='Notes') }}"
+                                        hx-target="#notes-field"
+                                        hx-swap="outerHTML">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Recipe Image -->
+            <div class="col-12 col-md-5 mb-4">
+                <!-- Photo Display Section -->
+                <div id="photo-section">
+                    {% if recipe.Photo and recipe.Photo[0].signedPath %}
+                        <img src="http://192.168.178.70:8080/{{ recipe.Photo[0].signedPath }}" class="img-fluid rounded-3 mb-3" alt="{{ recipe.Title }}">
+                    {% else %}
+                        <img src="https://images.unsplash.com/photo-1509358271058-acd22cc93898?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+                            class="img-fluid rounded-3 mb-3" alt="{{ recipe.Title }}">
+                    {% endif %}
+                </div>
+
+                <!-- Conditionally Display Photo Upload Button -->
+                <div id="photo-upload-section" class="mt-3">
+                    <button type="button" class="btn btn-primary hidden toggleable-button"
+                            hx-get="{{ url_for('core.upload_photo_field', recipe_id=recipe.Id) }}" 
+                            hx-target="#photo-upload-section" 
+                            hx-swap="outerHTML">
+                        Upload or Replace Photo
+                    </button>
+                </div>
+            </div>
+
+        </div>
+        <!-- Recipe Ingredients -->
+        <div class="profile-body pt-0 column">
+            <div class="icon-text d-flex align-items-start">     
+                <span class="fs-4 text-wrap w-100" style="word-break: break-word;">
+                    <div class="pb-2">
+                        <strong >Ingredients</strong>
+                    </div>
+                    <span id="ingredients-field">
+                        {% if recipe.Ingredients %}
+                            {{ ingredients_html | safe }}
+                        {% else %}
+                            No ingredients
+                        {% endif %}
+                    </span>
+                </span>
+                
+                <!-- Edit Button with Icon -->
+                <button class="btn btn-sm ms-2 hidden toggleable-button"
+                        hx-get="{{ url_for('core.edit_rich_field', field='Ingredients', recipe_id=recipe.Id) }}"
+                        hx-target="#ingredients-field"
+                        hx-swap="outerHTML">
+                    <i class="bi bi-pencil"></i> <!-- Bootstrap pencil icon -->
+                </button>
+            </div>
+
+            <!-- Recipe Method -->
+            <div class="icon-text d-flex align-items-start pt-2">     
+                <span class="fs-4 text-wrap w-100" style="word-break: break-word;">
+                    <div class="pb-2">
+                        <strong >Method</strong>
+                    </div>
+                    <span id="method-field" style="padding-bottom: 10px;">
+                        {% if recipe.Method %}
+                            {{ method_html | safe }}
+                        {% else %}
+                            No Method
+                        {% endif %}
+                    </span>
+                </span>
+                
+                <!-- Edit Button with Icon -->
+                <button class="btn btn-sm ms-2 hidden toggleable-button"
+                        hx-get="{{ url_for('core.edit_rich_field', field='Method', recipe_id=recipe.Id) }}"
+                        hx-target="#method-field"
+                        hx-swap="outerHTML">
+                    <i class="bi bi-pencil"></i> <!-- Bootstrap pencil icon -->
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleButtons() {
+        // Toggle visibility of elements with the 'toggleable-button' class
+        document.querySelectorAll('.toggleable-button').forEach(button => {
+            button.classList.toggle('hidden');
+        });
+        
+        // Get the edit button itself
+        const editButton = document.getElementById("toggle-edit");
+
+        // Toggle the 'active' class for color change
+        editButton.classList.toggle("active");
+
+        // Change text between "Edit" and "Done"
+        editButton.textContent = editButton.classList.contains("active") ? "Done" : "Edit";
+    }
+</script>
+
+<style>
+    .hidden {
+        display: none;
+    }
+
+   /* Initial red button styling */
+   .btn-edit {
+    background-color: #ff6b6b; /* Solid red background */
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    font-weight: bold;
+    transition: background-color 0.3s ease; /* Smooth transition */
+}
+
+/* Blue styling when in "Done" state */
+.btn-edit.active {
+    background-color: #0c1844; /* Solid blue background */
+    color: white;
+}
+
+/* Optional: Adjust rounded corners if needed */
+.btn-edit {
+    border-radius: 8px; /* Rounded corners */
+}
+
+.ckeditor{
+    width: 100%;
+}
+</style>
+
+
+{% endblock %}

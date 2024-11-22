@@ -1,0 +1,30 @@
+
+<!-- HTMX will replace this content with filtered wine recipes -->
+{% for recipe in recipes %}
+    <div class="col d-flex justify-content-center shop-card">
+        <div class="card h-100 w-100">
+            <div class="ratio ratio-16x9">
+                {% if recipe.Photo and recipe.Photo[0].signedPath %}
+                    <img src="https://nocodb.dataandstories.com/{{ recipe.Photo[0].signedPath }}" 
+                            class="card-img-top img-fluid" style="object-fit: cover;" alt="{{ recipe.Title }}">
+                {% else %}
+                    <img src="https://images.unsplash.com/photo-1509358271058-acd22cc93898?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+                            class="card-img-top img-fluid" style="object-fit: cover;" alt="{{ recipe.Title }}">
+                {% endif %}
+            </div>
+            <div class="card-body row d-flex justify-content-between">
+                <div class="col d-flex flex-column justify-content-between col-9">
+                    <h5 class="card-title">{{ recipe.Title }}</h5>
+                    <p class="card-text align-items-end">
+                        {{ recipe.Meal }}, 
+                        {{ recipe.Core }} <br>
+                        {{ recipe.Source | safe }}
+                    </p>
+                </div>
+                <div class="col d-flex justify-content-end align-self-end col-3 mt-auto">
+                    <a href="{{ url_for('core.recipe', Id=recipe.Id) }}" class="btn btn-primary d-flex justify-content-center align-items-center" style="height: 40px;">View</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}

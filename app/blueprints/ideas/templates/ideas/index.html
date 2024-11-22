@@ -1,0 +1,112 @@
+<!-- List of and search for all ideas -->
+{% extends "base.html" %}
+{% block title %}Ideas{% endblock %}
+
+{% block content %}
+<section class="hero align-items-center justify-content-center d-flex flex-column"
+    style="background-image: url('https://images.unsplash.com/photo-1515665966984-831e4cd20f96?q=80&w=2680&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+        background-size: cover; background-position: center; background-repeat: no-repeat;
+        height: 300px; width: 100%; position: relative;
+        display: flex; justify-content: center; align-items: center;
+        color: white; text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+        background-color: rgba(0, 0, 0, 0.25); 
+        background-blend-mode: darken;
+        margin-left: 0; /* This ensures it doesn’t overlap with the sidebar */
+        ">
+    <!-- Hero Text (with shadow for readability) -->
+    <div class="mt-auto mb-auto col-10" style="padding-top: 30px;">
+        <h1 class="display-1 text-white mb-4 text-center" style="text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);">
+            Ideas
+        </h1>
+        <!-- Sticky Search Bar -->
+        <div id="search-bar" class=" col-md-6 col-sm-10 d-flex flex-column justify-content-center bg-white rounded shadow-sm mt-4 mx-auto">
+            <input 
+                type="text" 
+                class="form-control"
+                name="idea-search" 
+                placeholder="Search idea name, meal, or source" 
+                value="{{ text or '' }}"
+                hx-get="{{ url_for('ideas.search') }}"
+                hx-trigger="keyup delay:500ms changed"
+                hx-target="#ideas-list"
+                hx-swap="innerHTML">
+        </div>
+    </div>
+</section>
+<!-- List of and search for all ideas -->
+
+<!-- Scrollable idea List Container -->
+<div class="container py-3 ps-4">
+    <div class="row">
+        <div class="col-12">
+            <!-- Scrollable div with a maximum height -->
+            <div style="max-height: 500px; overflow-y: auto; padding-right: 15px;">
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 justify-content-center" id="ideas-list">
+                    <!-- HTMX will replace this content with filtered ideas -->
+                    {% for idea in ideas %}
+                    <div class="col d-flex justify-content-center shop-card">
+                        <div class="card h-100 w-100">
+                            <div class="ratio ratio-16x9">
+                                <img src="https://images.unsplash.com/photo-1509358271058-acd22cc93898?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+                                        class="card-img-top img-fluid" style="object-fit: cover;" alt="{{ idea.Title }}">
+                            </div>
+                            <div class="card-body row d-flex justify-content-between">
+                                <div class="col d-flex flex-column justify-content-between col-9">
+                                    <h5 class="card-title">{{ idea.Title }}</h5>
+                                    <p class="card-text align-items-end">
+                                        {% if idea.Meal %}
+                                            {{ idea.Meal }},
+                                        {% endif %} 
+                                        {% if idea.Core %}
+                                            {{ idea.Core }}
+                                        {% endif %}
+                                         <br>
+                                        <span id="idea-source-field">
+                                            {% if idea.Source %}
+                                                {% for word in idea.Source.split() %}
+                                                    {% if word.startswith("http") %}
+                                                        <a href="{{ word }}" target="_blank" rel="noopener noreferrer" class="text-decoration-none">
+                                                            Link
+                                                        </a>
+                                                    {% else %}
+                                                        {{ word }}
+                                                    {% endif %}
+                                                    {% if not loop.last %} {{ " " }} {% endif %}
+                                                {% endfor %}
+                                            {% else %}
+                                                No source available
+                                            {% endif %}
+                                        </span>
+                                        <!-- Delete Button -->
+                                    </p>
+                                </div>
+                                <div class="col d-flex justify-content-end align-self-end col-3 mt-auto">
+                                    <div class="d-flex flex-row">
+                                        
+                                        <button 
+                                            class="btn btn-success btn-sm mt-2 mx-3"
+                                            hx-post="{{ url_for('ideas.move_to_recipes', idea_id=idea.Id) }}">
+                                            Add to recipes
+                                        </button>
+                                            
+                                        <button 
+                                            class="btn btn-primary btn-sm mt-2"
+                                            hx-delete="{{ url_for('ideas.delete_idea', idea_id=idea.Id) }}"
+                                            hx-target="closest .col"
+                                            hx-swap="outerHTML">
+                                            Delete
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,24 @@
+
+<form action="{{ url_for('core.save_photo', recipe_id=recipe_id) }}" 
+      method="post" 
+      enctype="multipart/form-data"
+      hx-indicator="#spinner">
+    <input type="file" name="photo" class="form-control mb-2" required>
+    
+    <div class="d-flex justify-content-between">
+      <!-- Update Button with Bootstrap Success Color -->
+      <button type="submit" class="btn btn-success" hx-indicator="#loading-spinner-modal">Upload</button>
+      <!-- Cancel Button to revert back to display mode -->
+    </div>
+</form>
+
+<script>
+  function handleCancel() {
+      // Your JavaScript logic to toggle the JSON script or handle the cancel action
+      console.log("Cancel button clicked");
+      
+      // Example: Toggle visibility or reset the content of `photo-upload-section`
+      document.getElementById('photo-upload-section').innerHTML = ''; // Clear upload section
+      // You could also reload the page, toggle visibility, or execute other logic here
+  }
+</script>

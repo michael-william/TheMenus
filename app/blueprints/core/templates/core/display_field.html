@@ -1,0 +1,7 @@
+<span hx-get="{{ url_for('core.edit_field', field=field, recipe_id=recipe_id) }}" 
+      hx-trigger="click" 
+      hx-target="#{{ field | lower }}-field" 
+      hx-swap="outerHTML" 
+      id="{{ field | lower }}-field">
+    {{ value }}
+</span>

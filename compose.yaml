@@ -1,0 +1,14 @@
+version: "3"
+services:
+  <APP_NAME>_web:
+    image: <IMAGE_NAME>:latest
+    volumes:
+      - /volume1/homes/User/Path:/<APP_NAME>  # Updated to your specified path
+    ports:
+      - "5001:5000"  # Adjusted port to avoid conflicts with other apps
+    environment:
+      - FLASK_ENV=production  # Set to 'production' for deployment
+    restart: unless-stopped  # Ensures container restarts if it crashes
+
+volumes:
+  <APP_NAME>_data:  # Updated to your app data directory:

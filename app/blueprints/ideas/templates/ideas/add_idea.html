@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}New Idea{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="profile-card">
+        <!-- Profile Header with Editable Fields -->
+        <div class="profile-header">
+            <h2>New Idea</h2>
+        </div>
+        
+        <!-- Profile Body with Editable Details -->
+        <form id="create-recipe-form" action="{{ url_for('ideas.save_new_idea') }}" method="post" enctype="multipart/form-data">
+            <div class="profile-body row">
+                
+                <!-- Recipe Details -->
+                <div class="col-12 col-md-7">
+                    <div class="d-flex flex-column gap-3">
+                        
+                        <!-- Editable Title Field -->
+                        <div class="icon-text">
+                            <strong>Title:</strong>
+                            <input type="text" name="title" class="form-control mb-2" placeholder="Enter recipe title" required>
+                        </div>
+
+                        <!-- Editable Meal Field -->
+                        <div class="icon-text">
+                            <strong>Meal:</strong>
+                            <input type="text" name="meal" class="form-control mb-2" placeholder="Enter meal type (e.g., Lunch, Dinner)">
+                        </div>
+
+                        <!-- Editable Core Field -->
+                        <div class="icon-text">
+                            <strong>Core:</strong>
+                            <input type="text" name="core" class="form-control mb-2" placeholder="Enter core ingredient">
+                        </div>
+
+                        <!-- Editable Source Field -->
+                        <div class="icon-text">
+                            <strong>Source:</strong>
+                            <input type="text" name="source" class="form-control mb-2" placeholder="Enter source (e.g., cookbook, website)">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Recipe Notes -->
+                <div class="profile-body row pt-0">
+                    <div class="col-12">
+                        <div class="icon-text">
+                            <strong>Notes:</strong>
+                            <textarea name="notes" class="form-control mb-2" rows="3" placeholder="Enter recipe notes"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Save Button -->
+            <button type="submit" class="btn btn-primary mt-4"
+                hx-indicator="#loading-spinner-modal">
+                Save Recipe
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

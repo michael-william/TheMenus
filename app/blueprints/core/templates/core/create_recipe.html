@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block title %}Create Recipe{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="profile-card">
+        <!-- Profile Header with Editable Fields -->
+        <div class="profile-header">
+            <h2>New Recipe</h2>
+        </div>
+        
+        <!-- Profile Body with Editable Details -->
+        <form id="create-recipe-form" action="{{ url_for('core.save_new_recipe') }}" method="post" enctype="multipart/form-data">
+            <div class="profile-body row">
+                
+                <!-- Recipe Details -->
+                <div class="col-12 col-md-7">
+                    <div class="d-flex flex-column gap-3">
+                        
+                        <!-- Editable Title Field -->
+                        <div class="icon-text">
+                            <strong>Title</strong><br>
+                            <input type="text" name="title" class="form-control mb-2" placeholder="Enter recipe title" required>
+                        </div>
+
+                        <!-- Editable Meal Field -->
+                        <div class="icon-text">
+                            <strong>Meal</strong><br>
+                            <input type="text" name="meal" class="form-control mb-2" placeholder="Enter meal type (e.g., Lunch, Dinner)" required>
+                        </div>
+
+                        <!-- Editable Core Field -->
+                        <div class="icon-text">
+                            <strong>Core</strong><br>
+                            <input type="text" name="core" class="form-control mb-2" placeholder="Enter core ingredient" required>
+                        </div>
+
+                        <!-- Editable Source Field -->
+                        <div class="icon-text">
+                            <strong>Source </strong><br>
+                            <input type="text" name="source" class="form-control mb-2" placeholder="Enter source (e.g., cookbook, website)">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Recipe Image Upload -->
+                <div class="col-12 col-md-5 mb-4">
+                    <div id="photo-upload-section" class="mt-3">
+                        <label for="photo"><strong>Upload Photo</strong></label>
+                        <div>
+                            <input type="file" name="photo" id="photo" class="form-control mb-2">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Recipe Notes -->
+                <div class="profile-body row pt-0">
+                    <div class="col-12">
+                        <div class="icon-text">
+                            <strong>Notes:</strong>
+                            <textarea name="notes" class="form-control mb-2" rows="3" placeholder="Enter recipe notes"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <!-- Save Button -->
+                <button type="submit" class="btn btn-primary mt-4 w-50"
+                    hx-indicator="#loading-spinner-modal">
+                    Save Recipe
+                </button>
+            </div>
+            
+        </form>
+    </div>
+</div>
+{% endblock %}

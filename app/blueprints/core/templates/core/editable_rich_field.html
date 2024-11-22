@@ -1,0 +1,30 @@
+
+<form class="w-100"
+
+      hx-post="{{ url_for('core.update_rich_field', recipe_id=recipe_id, field=field) }}" 
+      hx-target="#{{ field | lower }}-field" 
+      hx-swap="outerHTML"
+      id="{{ field | lower }}-field"
+      hx-on="htmx:configRequest: console.log('HTMX request:', event.detail);">
+      {{ ckeditor.create('value', value=current_value) }}
+    
+    <div class="d-flex justify-content-between">
+      <!-- Update Button with Bootstrap Success Color -->
+      <button type="submit" class="btn btn-success me-2">Update</button>
+      
+      <!-- Cancel Button to revert back to display mode -->
+      <button type="button" class="btn btn-primary"
+              hx-get="{{ url_for('core.display_rich_field', recipe_id=recipe_id, field=field) }}" 
+              hx-target="#{{ field | lower }}-field" 
+              hx-swap="outerHTML"
+              hx-indicator="#spinner">
+          Cancel
+      </button>
+      <div class=" htmx-indicator" id="spinner">
+        <div class="spinner-border text-primary" role="status">
+          <span class="sr-only"></span>
+        </div>
+      </div>
+    </div>
+</form>
+
