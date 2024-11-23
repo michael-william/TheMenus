@@ -28,7 +28,7 @@
 <!-- Navbar (Visible Only on Mobile) -->
 <nav class="navbar navbar-expand-lg fixed-top shadow-md bg-primary d-lg-none" data-bs-theme="dark" style="z-index: 1030;">
     <div class="container-fluid">
-        <a class="navbar-brand" href="{{ url_for('core.index') }}">Meal Planning</a>
+        <a class="navbar-brand" href="{{ url_for('menu.index') }}">Meal Planning</a>
         <!-- Sidebar Toggle Button for Mobile -->
         <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileSidebar" aria-controls="mobileSidebar" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -42,17 +42,17 @@
             <!-- Sidebar Column - Always visible on large screens, offcanvas on mobile -->
             <div class="col-lg-2 d-none d-lg-block bg-primary text-white min-vh-100 py-5" id="sidebar">
                 <!-- Sidebar content for large screens -->
-                <a class="navbar-brand" href="{{ url_for('core.index') }}">
+                <a class="navbar-brand" href="{{ url_for('menu.index') }}">
                     <h2 class="text-wrap">Meal Planning</h2>
                 </a>
                 <ul class="nav flex-column p-3">
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="{{ url_for('core.index') }}">
+                        <a class="nav-link text-white" href="{{ url_for('menu.index') }}">
                             <i class="bi bi-book-half me-2"></i> Recipes
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="{{ url_for('core.create_recipe') }}">
+                        <a class="nav-link text-white" href="{{ url_for('menu.create_recipe') }}">
                             <i class="bi bi-card-text me-2"></i> Add recipe
                         </a>
                     </li>
@@ -79,12 +79,12 @@
                 <div class="offcanvas-body">
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link text-white" href="{{ url_for('core.index') }}">
+                            <a class="nav-link text-white" href="{{ url_for('menu.index') }}">
                                 <i class="bi bi-book-half me-2"></i> Recipes
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white" href="{{ url_for('core.create_recipe') }}">
+                            <a class="nav-link text-white" href="{{ url_for('menu.create_recipe') }}">
                                 <i class="bi bi-crad-text me-2"></i> Add recipe
                             </a>
                         </li>

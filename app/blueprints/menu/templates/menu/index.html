@@ -26,7 +26,7 @@
                 name="search" 
                 placeholder="Search recipe name, type, or source" 
                 value="{{ text or '' }}"
-                hx-get="{{ url_for('core.search') }}"
+                hx-get="{{ url_for('menu.search') }}"
                 hx-trigger="keyup delay:500ms changed"
                 hx-target="#recipes-list"
                 hx-swap="innerHTML"
@@ -44,7 +44,7 @@
             <div class="" style="padding-right: 15px; ">
                 <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 justify-content-center" id="recipes-list">
                     <!-- HTMX will return blank search results on initial load, and then swap with filtered recipes on search -->
-                    <div hx-get="{{ url_for('core.search') }}" hx-target="#recipes-list" hx-swap="innerHTML" hx-trigger="load"></div>
+                    <div hx-get="{{ url_for('menu.search') }}" hx-target="#recipes-list" hx-swap="innerHTML" hx-trigger="load"></div>
                 </div>
             </div>
         </div>
